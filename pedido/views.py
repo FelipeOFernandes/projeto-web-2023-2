@@ -1,9 +1,18 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Pedido
 
-# Create your views here.
+@login_required
 def pedir(request):
     return HttpResponse('Pedir')
 
+@login_required
 def pedidos(request):
-    return HttpResponse('Pedidos')
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+
+    pedidos = Pedido.objects.filter(usuario=request.user)
+    context = {'pedidos': pedidos}
+
+    return render(request, 'pedidos.html', context)

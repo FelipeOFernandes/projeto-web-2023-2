@@ -24,6 +24,6 @@ urlpatterns = [
 urlpatterns = [
     path('auth/', include('usuarios.urls')),   #adicione essa linha aqui
     path('admin/', admin.site.urls),
-    path('/', include('pedido.urls')),
+    path('', include('pedido.urls')),
     path('estoque/', include('estoque.urls')),
 ]
