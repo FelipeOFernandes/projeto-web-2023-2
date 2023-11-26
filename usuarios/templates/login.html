@@ -9,11 +9,11 @@
     <form action="{% url 'login' %}" method="POST" data-bs-theme="dark">
       {% csrf_token %}
       <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="usuario" id="usuario" placeholder="Usuário">
+        <input type="text" class="form-control" name="usuario" id="usuario" placeholder="Usuário" required>
         <label for="usuario">Usuário</label>
       </div>
       <div class="form-floating mb-3">
-        <input type="password" class="form-control" name="senha" id="senha" placeholder="Senha">
+        <input type="password" class="form-control" name="senha" id="senha" placeholder="Senha" required>
         <label for="senha">Senha</label>
       </div>
 

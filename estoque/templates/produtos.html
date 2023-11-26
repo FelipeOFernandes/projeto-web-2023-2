@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block titulo %} Produtos cadastrados {% endblock %} 
+
+{% block conteudo %}
+<div class="bg-dark mb-3 mx-auto p-2" data-bs-theme="dark">
+    <button type="button" class="btn btn-success float-end"><a href="{% url 'cadastrarProduto' %}">Cadastrar produto</a></button>
+    <div class="card-body">
+        <h3 class="text-center">Lista de produtos</h3>
+        {% if produtos %}
+            <div class="accordion p-2" id="accordion-produtos">
+                {% for produto in produtos %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#produto-{{ produto.id }}" aria-expanded="true" aria-controls="produto-{{ produto.id }}">
+                                {{ produto }}
+                            </button>
+                        </h2>
+                        <div id="produto-{{ produto.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-produtos">
+                            <div class="accordion-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="col-6">
+                                        Data de última compra: {{ produto.data_de_ultima_compra }}
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="button" class="btn btn-primary"><a href="{% url 'editarProduto' produto.id %}">Editar</a></button>
+                                        <button type="button" class="btn btn-danger"><a href="{% url 'deletarProduto' produto.id %}">Remover</a></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
