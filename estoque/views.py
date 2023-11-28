@@ -59,17 +59,60 @@ def pratos(request):
 
 def cadastrarPrato(request):
     if request.method == "GET":
-        return render(request, 'cadastrarPrato.html')
+        produtos = Produto.objects.all()
+        template = loader.get_template('cadastrarPrato.html')
+        context = {
+            'produtos': produtos,
+        }
+        return HttpResponse(template.render(context, request))
     else:
         nome = request.POST.get('nome')
         preco = request.POST.get('preco')
-        produtos = request.POST.get('produtos')
+        produtoIds = request.POST.getlist('produtoId[]')
+        quantidades = request.POST.getlist('quantidade[]')
         prato = Prato.objects.create(nome=nome,preco=preco)
         prato.save()
 
-        for produto in produtos:
-            produto = Produto.objects.get(id=produto.id)
-            pratoProduto = PratoProduto.objects.create(quantidade=produto.quantidade, prato=prato, produto=produto)
+        for i in range(0,len(produtoIds)):
+            produto = Produto.objects.get(id=produtoIds[i])
+            pratoProduto = PratoProduto.objects.create(quantidade=quantidades[i], prato=prato, produto=produto)
             pratoProduto.save()
 
+        messages.success(request, 'Prato criado com sucesso')
         return redirect('pratos')
+    
+def editarPrato(request, id):
+    prato = get_object_or_404(Prato, id=id)
+    if request.method == "GET":
+        produtos = Produto.objects.all()
+        template = loader.get_template('editarPrato.html')
+        context = {
+            'prato': prato,
+            'produtos': produtos
+        }
+        return HttpResponse(template.render(context, request))
+    else:
+        nome = request.POST.get('nome')
+        preco = request.POST.get('preco')
+        produtoIds = request.POST.getlist('produtoId[]')
+        quantidades = request.POST.getlist('quantidade[]')
+        prato.nome = nome
+        prato.preco = preco
+        prato.save()
+
+        pratoProdutos=PratoProduto.objects.filter(prato=prato)
+        for pratoProduto in pratoProdutos:
+            pratoProduto.delete()
+
+        for i in range(0,len(produtoIds)):
+            produto = Produto.objects.get(id=produtoIds[i])
+            pratoProduto = PratoProduto.objects.create(quantidade=quantidades[i], prato=prato, produto=produto)
+            pratoProduto.save()
+        messages.success(request, 'Prato atualizado com sucesso')
+        return redirect('pratos')
+
+def deletarPrato(request, id):
+    prato = get_object_or_404(Prato, id=id)
+    prato.delete()
+    messages.success(request, 'Prato deletado com sucesso')
+    return redirect('pratos')

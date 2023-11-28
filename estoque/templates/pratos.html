@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block titulo %} Pratos cadastrados {% endblock %} 
+
+{% block conteudo %}
+<div class="bg-dark mb-3 mx-auto p-2" data-bs-theme="dark">
+    <button type="button" class="btn btn-success float-end"><a href="{% url 'cadastrarPrato' %}">Cadastrar prato</a></button>
+    <div class="card-body">
+        <h3 class="text-center">Lista de pratos</h3>
+        {% if pratos %}
+            <div class="accordion p-2" id="accordion-pratos">
+                {% for prato in pratos %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#prato-{{ prato.id }}" aria-expanded="true" aria-controls="prato-{{ prato.id }}">
+                                {{ prato }}
+                            </button>
+                        </h2>
+                        <div id="prato-{{ prato.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-pratos">
+                            <div class="accordion-body">
+                                <div class="d-flex">
+                                    <div class="col-6">
+                                        Preço: R$ {{ prato.preco }}
+                                        <div>
+                                            {% for prato_produto in prato.pratoproduto_set.all %}
+                                                <span class="badge text-bg-light">{{ prato_produto.produto.nome }}: {{ prato_produto.quantidade }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="button" class="btn btn-primary"><a href="{% url 'editarPrato' prato.id %}">Editar</a></button>
+                                        <button type="button" class="btn btn-danger"><a href="{% url 'deletarPrato' prato.id %}">Remover</a></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

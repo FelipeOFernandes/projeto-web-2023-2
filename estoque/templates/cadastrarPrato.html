@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block titulo %} Novo prato{% endblock %} 
+{% block conteudo %}
+<div class="mb-3 mx-auto p-2">
+  <div class="card text-light bg-dark " data-bs-theme="dark">
+    <div class="card-body">
+      <h3 class="text-center">Cadastre o novo prato</h3>
+      <form action="{% url 'cadastrarPrato' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            name="nome"
+            id="nome"
+            placeholder="Nome"
+            required
+          />
+          <label for="nome">Nome</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            type="number"
+            class="form-control"
+            name="preco"
+            id="preco"
+            placeholder="Preço"
+          />
+          <label for="preco">Preço</label>
+        </div>
+
+        <div id="produtos-container">
+          <div class="produto-card mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <select class="form-select" name="produtoId[]" id="produto1" required>
+                    <option></option>
+                    {% for produto in produtos %}
+                      <option value="{{ produto.id }}">{{ produto.nome }}</option>
+                    {% endfor %}
+                  </select>
+                  <label for="produto1">Escolha um produto:</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="quantidade[]"
+                    id="quantidade1"
+                    placeholder="Quantidade"
+                    required
+                  />
+                  <label for="quantidade1">Quantidade</label>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="removerProduto(this)">Remover Produto</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <button type="button" class="btn btn-info" onclick="adicionarProduto()">Adicionar Produto</button>
+        </div>
+        <div class="d-grid">
+          <input type="submit" value="Cadastrar" class="btn btn-light" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  let contadorProdutos = 1;
+
+  function adicionarProduto() {
+    contadorProdutos++;
+    const container = document.getElementById('produtos-container');
+
+    const divProdutoCard = document.createElement('div');
+    divProdutoCard.className = 'produto-card mb-3';
+    divProdutoCard.innerHTML = `
+    <div class="card">
+        <div class="card-body">
+          <div class="form-floating mb-3">
+            <select class="form-select" name="produtoId[]" id="produto${contadorProdutos}" required>
+              <option></option>
+              {% for produto in produtos %}
+                <option value="{{ produto.id }}">{{ produto.nome }}</option>
+              {% endfor %}
+            </select>
+            <label for="produto${contadorProdutos}">Escolha um produto:</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="number"
+              class="form-control"
+              name="quantidade[]"
+              id="quantidade${contadorProdutos}"
+              placeholder="Quantidade"
+              required
+            />
+            <label for="quantidade${contadorProdutos}">Quantidade</label>
+          </div>
+          <button type="button" class="btn btn-danger" onclick="removerProduto(this)">Remover Produto</button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(divProdutoCard);
+  }
+
+  function removerProduto(botaoRemover) {
+    const produtoCard = botaoRemover.closest('.produto-card');
+    produtoCard.remove();
+  }
+</script>
+
+{% endblock %}
