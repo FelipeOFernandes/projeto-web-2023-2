@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'restaurante.middleware.RabbitMQConsumerMiddleware'
 ]
 
 ROOT_URLCONF = 'restaurante.urls'
@@ -117,6 +118,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+RABBITMQ_HOST = 'localhost'
+RABBITMQ_PORT = 5672
+RABBITMQ_SEND_QUEUE = 'pedido_queue'
+RABBITMQ_RECIEVE_QUEUE = 'estoque_queue'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
