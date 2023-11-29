@@ -4,9 +4,33 @@
 
 {% block conteudo %}
 <div class="bg-dark mb-3 mx-auto p-2" data-bs-theme="dark">
-<button type="button" href="/pedir" class="btn btn-success float-end"> Criar pedido</button>
+<button type="button" class="btn btn-success float-end"><a href="/pedir"> Criar pedido</a></button>
   <div class="card-body">
     <h3 class="text-center">Meus pedidos </h3>
+    {% if pedidos %}
+    <div class="accordion p-2" id="accordion-pedidos">
+        {% for pedido in pedidos %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pedido-{{ pedido.id }}" aria-expanded="true" aria-controls="pedido-{{ pedido.id }}">
+                        {{ pedido }}
+                    </button>
+                </h2>
+                <div id="pedido-{{ pedido.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-pedido">
+                    <div class="accordion-body">
+                        <div class="d-flex align-items-center">
+                            <div class="col-6">
+                                <p>Prato: {{ pedido.prato }}</p>
+                                <p>Data do pedido: {{pedido.datahora|date:"d/m/Y H:i" }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
   </div>
 </div>
 {% endblock %}

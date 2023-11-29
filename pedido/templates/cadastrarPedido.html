@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block titulo %} Novo pedido{% endblock %} 
+{% block conteudo %}
+<div class="mb-3 mx-auto p-2">
+<div class="card text-light bg-dark " data-bs-theme="dark">
+  <div class="card-body">
+    <h3 class="text-center">Cadastre o novo pedido</h3>
+    <form action="{% url 'cadastrarPedido' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-floating mb-3">
+        <select class="form-select" name="pratoId" id="prato" required>
+          <option></option>
+          {% for prato in pratos %}
+            <option value="{{ prato.id }}">{{ prato.nome }}</option>
+          {% endfor %}
+        </select>
+        <label for="prato">Escolha um prato:</label>
+      </div>
+      <div class="d-grid">
+        <input type="submit" value="Cadastrar" class="btn btn-light" />
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+{% endblock %}

@@ -11,4 +11,4 @@ class Pedido(models.Model):
     datahora= models.DateTimeField(default=timezone.now)
 
     def __str__(self):  #definição de função adionada
-        return f"{self.usuario} - {self.prato.nome} {self.datahora}" 
+        return f"{self.usuario} - {self.prato.nome}" 
